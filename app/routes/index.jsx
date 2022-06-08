@@ -1,4 +1,7 @@
+import { useGetNanoId } from "../hooks/useGetNanoId";
+
 export default function Index() {
+  const uniqeSlug = useGetNanoId()
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
       <h1>Welcome to Remix</h1>
@@ -9,7 +12,7 @@ export default function Index() {
             href="https://remix.run/tutorials/blog"
             rel="noreferrer"
           >
-            15m Quickstart Blog Tutorial
+            {uniqeSlug}
           </a>
         </li>
         <li>

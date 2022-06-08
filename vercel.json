@@ -1,0 +1,10 @@
+{
+  "github": {
+    "silent": true
+  },
+  "build": {
+    "env": {
+      "ENABLE_FILE_SYSTEM_API": "1"
+    }
+  }
+}
