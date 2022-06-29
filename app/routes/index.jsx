@@ -8,7 +8,11 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { useGetNanoId } from '../hooks/useGetNanoId'
 
 export default function Index() {
-  const [items, setItems] = useState(['a', 'b', 'c'])
+  const [items, setItems] = useState([
+    { id: '1', value: 'a' },
+    { id: '2', value: 'b' },
+    { id: '3', value: 'c' },
+  ])
   const [isWindowReady, setIsWindowReady] = useState(false)
 
   useEffect(() => {
@@ -16,12 +20,12 @@ export default function Index() {
   }, [])
 
   const addItem = () => {
-    setItems([...items, ''])
+    setItems([...items, { id: useGetNanoId(), value: '' }])
   }
 
   const updateItem = (index, value) => {
     const newItems = [...items]
-    newItems[index] = value
+    newItems[index]['value'] = value
     setItems(newItems)
   }
 
@@ -73,7 +77,11 @@ export default function Index() {
                   {(provided, snapshot) => (
                     <div {...provided.droppableProps} ref={provided.innerRef}>
                       {items.map((item, idx) => (
-                        <Draggable key={item} draggableId={item} index={idx}>
+                        <Draggable
+                          key={item.id}
+                          draggableId={item.id}
+                          index={idx}
+                        >
                           {(provided, snapshot) => (
                             <div
                               ref={provided.innerRef}
@@ -96,7 +104,7 @@ export default function Index() {
                                   <div className="flex-1">
                                     <TextInput
                                       name="item"
-                                      value={item}
+                                      value={item.value}
                                       onChange={(e) =>
                                         updateItem(idx, e.target.value)
                                       }
