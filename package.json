@@ -8,6 +8,8 @@
     "dev:css": "postcss -w styles/main.scss -o app/styles/main.css"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.0.5",
+    "@dnd-kit/sortable": "^7.0.1",
     "@remix-run/node": "^1.5.1",
     "@remix-run/react": "^1.5.1",
     "@remix-run/vercel": "^1.5.1",
