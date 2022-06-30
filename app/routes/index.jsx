@@ -104,8 +104,8 @@ export default function Index() {
                                   >
                                     <GripVertical />
                                   </div>
-                                  <div className="flex-1 pl-1">
-                                    <TextInput
+                                  <div className="flex-1 py-4 pl-1">
+                                    <GrowingTextarea
                                       name="item"
                                       value={item.value}
                                       onChange={(e) =>
@@ -145,6 +145,28 @@ export default function Index() {
           </div>
         </Form>
       </div>
+    </div>
+  )
+}
+
+const GrowingTextarea = ({ value, onChange, className, ...props }) => {
+  return (
+    <div className={clsx('relative', className)}>
+      <div
+        aria-hidden="true"
+        className="invisible min-h-[2.375rem] whitespace-pre-wrap border py-2 px-3"
+      >
+        {value}
+      </div>
+      <textarea
+        {...props}
+        className={clsx(
+          'absolute top-0 left-0 h-full w-full resize-none overflow-hidden py-2 px-3',
+          'focus:blue-indigo-500 block rounded-md border border-gray-300 bg-gray-50 focus:border-blue-500'
+        )}
+        value={value}
+        onChange={onChange}
+      />
     </div>
   )
 }
