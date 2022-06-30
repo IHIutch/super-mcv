@@ -86,22 +86,25 @@ export default function Index() {
                             <div
                               ref={provided.innerRef}
                               {...provided.draggableProps}
-                              {...provided.dragHandleProps}
                               className="mb-4"
                             >
                               <div
                                 className={clsx(
-                                  'rounded-md bg-white p-4 transition-all',
-                                  snapshot.isDragging
-                                    ? 'user-select-none scale-105 shadow-2xl'
+                                  'rounded-md bg-white transition-all',
+                                  snapshot.isDragging &&
+                                    !snapshot.isDropAnimating
+                                    ? 'scale-[1.03] shadow-xl'
                                     : 'scale-100 shadow-sm'
                                 )}
                               >
                                 <div className="flex items-center">
-                                  <div className="pr-4 text-slate-500">
+                                  <div
+                                    className="py-6 px-2 text-slate-500"
+                                    {...provided.dragHandleProps}
+                                  >
                                     <GripVertical />
                                   </div>
-                                  <div className="flex-1">
+                                  <div className="flex-1 pl-1">
                                     <TextInput
                                       name="item"
                                       value={item.value}
@@ -110,16 +113,15 @@ export default function Index() {
                                       }
                                     />
                                   </div>
-                                  {items.length > 1 ? (
-                                    <div className="pl-4 text-slate-500">
-                                      <Button
-                                        onClick={() => removeItem(idx)}
-                                        color="light"
-                                      >
-                                        <Trash2 className="h-4 w-4 text-red-500" />
-                                      </Button>
-                                    </div>
-                                  ) : null}
+                                  <div className="p-4 text-slate-500">
+                                    <Button
+                                      onClick={() => removeItem(idx)}
+                                      color="light"
+                                      disabled={items.length <= 2}
+                                    >
+                                      <Trash2 className="h-4 w-4 text-red-500" />
+                                    </Button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
