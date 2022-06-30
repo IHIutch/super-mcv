@@ -154,7 +154,7 @@ const GrowingTextarea = ({ value, onChange, className, ...props }) => {
     <div className={clsx('relative', className)}>
       <div
         aria-hidden="true"
-        className="invisible min-h-[2.375rem] whitespace-pre-wrap border py-2 px-3"
+        className="invisible min-h-[2.625rem] whitespace-pre-wrap border py-2 px-3"
       >
         {value}
       </div>
