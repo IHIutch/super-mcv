@@ -2,30 +2,32 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
 }
 
 model Survey {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  shareId   String   @unique
+  id        Int        @id @default(autoincrement())
+  shortcode String     @unique
   question  String
-  choices   Json[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  // responses Response[]
+  choices   Json       @db.Json
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Response  Response[]
 }
 
 model Response {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int      @id @default(autoincrement())
   name      String?
-  choices   Json[]
+  choices   Json     @db.Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  surveyId  String?  @db.ObjectId
-  // Survey    Survey   @relation(fields: [surveyId], references: [id])
+  surveyId  Int
+  Survey    Survey   @relation(fields: [surveyId], references: [id])
 }
