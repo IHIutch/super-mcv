@@ -67,8 +67,8 @@ export default function Survey() {
                   <div {...provided.droppableProps} ref={provided.innerRef}>
                     {tempChoices.map((choice, idx) => (
                       <Draggable
-                        key={choice.startingIndex}
-                        draggableId={choice.startingIndex}
+                        key={choice.startingIndex.toString()}
+                        draggableId={choice.startingIndex.toString()}
                         index={idx}
                       >
                         {(provided, snapshot) => (
@@ -124,9 +124,14 @@ export const loader = async ({ params }) => {
   const { shortcode } = params
   const survey = await prismaGetSurvey({ shortcode })
 
-  const shuffledChoices = shuffle(survey.choices).map((c, idx) => ({
+  const surveyChoices = survey.choices.map((c, idx) => ({
+    originalIndex: idx,
     value: c,
-    startingIndex: idx.toString(),
+  }))
+
+  const shuffledChoices = shuffle(surveyChoices).map((c, idx) => ({
+    ...c,
+    startingIndex: idx,
   }))
 
   return json({
