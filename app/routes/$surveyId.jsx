@@ -11,12 +11,16 @@ import clsx from 'clsx'
 import { GripVertical } from 'lucide-react'
 import { Button, Label, TextInput } from 'flowbite-react'
 import shuffle from 'lodash/shuffle'
+import { prismaGetSurvey } from '../utils/prisma/surveys.server'
+import { prismaCreateResponse } from '../utils/prisma/responses.server'
 
 export default function Survey() {
   const params = useParams()
   const { surveyId } = params
-  const { choices, question } = useLoaderData()
-  const [tempChoices, setTempChoices] = useState(choices)
+  const { survey } = useLoaderData()
+
+  console.log(survey.choices)
+  const [tempChoices, setTempChoices] = useState(survey.choices)
 
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list)
@@ -46,7 +50,7 @@ export default function Survey() {
     <div className="min-h-screen bg-slate-100 py-20">
       <div className="mx-auto max-w-screen-md">
         <div className="mb-8 text-center">
-          <h1 className="mb-1 text-5xl font-bold">{question}</h1>
+          <h1 className="mb-1 text-5xl font-bold">{survey.question}</h1>
           <p className="text-xl font-light text-slate-600">{surveyId}</p>
         </div>
         <Form method="post">
@@ -90,7 +94,7 @@ export default function Survey() {
                                   {choice.value} {choice.startingIdx}
                                   <input
                                     type="hidden"
-                                    name="answers"
+                                    name="choices"
                                     value={JSON.stringify(choice)}
                                   />
                                 </div>
@@ -115,16 +119,25 @@ export default function Survey() {
   )
 }
 
-export const loader = async () => {
-  const choices = shuffle([
-    { uniqueId: '1', value: 'a' },
-    { uniqueId: '2', value: 'b' },
-    { uniqueId: '3', value: 'c' },
-  ]).map((c, idx) => ({ ...c, startingIdx: idx }))
+export const loader = async ({ params }) => {
+  const { surveyId } = params
+  const survey = await prismaGetSurvey({ shareId: surveyId })
+
+  const surveyChoices = survey.choices.map((c, idx) => ({
+    uniqueId: idx.toString(),
+    value: c,
+  }))
+
+  const shuffledChoices = shuffle(surveyChoices).map((c, idx) => ({
+    ...c,
+    startingIdx: idx,
+  }))
 
   return json({
-    choices,
-    question: 'Rank your favorite colors!',
+    survey: {
+      ...survey,
+      choices: shuffledChoices,
+    },
   })
 }
 
@@ -132,7 +145,9 @@ export async function action({ request, params }) {
   const { surveyId } = params
   const formData = await request.formData()
   const name = formData.get('name')
-  const answers = formData.getAll('answers').map((a) => JSON.parse(a))
-  console.log({ answers, name, surveyId })
+  const choices = formData.getAll('choices').map((a) => JSON.parse(a))
+
+  await prismaCreateResponse({ name, choices })
+
   return redirect(`${surveyId}/results`)
 }
