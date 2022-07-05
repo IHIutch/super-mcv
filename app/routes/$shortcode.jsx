@@ -16,7 +16,7 @@ import { prismaCreateResponse } from '../utils/prisma/responses.server'
 
 export default function Survey() {
   const params = useParams()
-  const { surveyId } = params
+  const { shortcode } = params
   const { survey } = useLoaderData()
 
   console.log(survey.choices)
@@ -51,7 +51,7 @@ export default function Survey() {
       <div className="mx-auto max-w-screen-md">
         <div className="mb-8 text-center">
           <h1 className="mb-1 text-5xl font-bold">{survey.question}</h1>
-          <p className="text-xl font-light text-slate-600">{surveyId}</p>
+          <p className="text-xl font-light text-slate-600">{shortcode}</p>
         </div>
         <Form method="post">
           <div className="mb-4 px-4">
@@ -67,8 +67,8 @@ export default function Survey() {
                   <div {...provided.droppableProps} ref={provided.innerRef}>
                     {tempChoices.map((choice, idx) => (
                       <Draggable
-                        key={choice.uniqueId}
-                        draggableId={choice.uniqueId}
+                        key={choice.startingIndex}
+                        draggableId={choice.startingIndex}
                         index={idx}
                       >
                         {(provided, snapshot) => (
@@ -110,6 +110,7 @@ export default function Survey() {
               </Droppable>
             </DragDropContext>
           </div>
+          <input type="hidden" name="surveyId" value={survey.id} />
           <div className="flex justify-end">
             <Button type="submit">Submit Answers</Button>
           </div>
@@ -120,17 +121,12 @@ export default function Survey() {
 }
 
 export const loader = async ({ params }) => {
-  const { surveyId } = params
-  const survey = await prismaGetSurvey({ shareId: surveyId })
+  const { shortcode } = params
+  const survey = await prismaGetSurvey({ shortcode })
 
-  const surveyChoices = survey.choices.map((c, idx) => ({
-    uniqueId: idx.toString(),
+  const shuffledChoices = shuffle(survey.choices).map((c, idx) => ({
     value: c,
-  }))
-
-  const shuffledChoices = shuffle(surveyChoices).map((c, idx) => ({
-    ...c,
-    startingIdx: idx,
+    startingIndex: idx.toString(),
   }))
 
   return json({
@@ -142,12 +138,13 @@ export const loader = async ({ params }) => {
 }
 
 export async function action({ request, params }) {
-  const { surveyId } = params
+  const { shortcode } = params
   const formData = await request.formData()
+  const surveyId = Number(formData.get('surveyId'))
   const name = formData.get('name')
-  const choices = formData.getAll('choices').map((a) => JSON.parse(a))
+  const choices = formData.getAll('choices').map((c) => JSON.parse(c))
 
-  await prismaCreateResponse({ name, choices })
+  await prismaCreateResponse({ name, choices, surveyId })
 
-  return redirect(`${surveyId}/results`)
+  return redirect(`${shortcode}/results`)
 }

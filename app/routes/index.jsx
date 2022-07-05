@@ -1,7 +1,7 @@
-import { json } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
 import { Form } from '@remix-run/react'
 import clsx from 'clsx'
-import { Button } from 'flowbite-react'
+import { Button, Label, TextInput } from 'flowbite-react'
 import { GripVertical, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import {
@@ -12,6 +12,7 @@ import {
 } from 'react-beautiful-dnd'
 import GrowingTextarea from '../components/GrowingTextarea'
 import { getNanoId } from '../utils/functions'
+import { prismaCreateSurvey } from '../utils/prisma/surveys.server'
 
 export default function Index() {
   const [items, setItems] = useState([
@@ -19,11 +20,6 @@ export default function Index() {
     { uniqueId: '2', value: 'b' },
     { uniqueId: '3', value: 'c' },
   ])
-  const [isWindowReady, setIsWindowReady] = useState(false)
-
-  useEffect(() => {
-    setIsWindowReady(true)
-  }, [])
 
   const addItem = () => {
     setItems([...items, { id: getNanoId(), value: '' }])
@@ -77,6 +73,12 @@ export default function Index() {
           </p>
         </div>
         <Form method="post">
+          <div className="mb-4 px-4">
+            <div className="mb-1">
+              <Label htmlFor="question">Your Question</Label>
+            </div>
+            <TextInput id="question" name="question" required />
+          </div>
           <div className="mb-8 rounded-md border border-slate-300 bg-slate-200 p-4">
             <DragDropContext onDragEnd={handleDragEnd}>
               <Droppable droppableId="droppable">
@@ -111,7 +113,7 @@ export default function Index() {
                                 </div>
                                 <div className="flex-1 py-4 pl-1">
                                   <GrowingTextarea
-                                    name="item"
+                                    name="choices"
                                     value={item.value}
                                     onChange={(e) =>
                                       updateItem(idx, e.target.value)
@@ -155,8 +157,11 @@ export default function Index() {
 
 export async function action({ request }) {
   const formData = await request.formData()
-  const items = formData.getAll('item')
-  console.log({ items })
-  const uniqeSlug = getNanoId()
-  return json({ uniqeSlug })
+  const question = formData.get('question')
+  const choices = formData.getAll('choices')
+  const shortcode = getNanoId()
+
+  await prismaCreateSurvey({ question, choices, shortcode })
+
+  return redirect(`/${shortcode}`)
 }
