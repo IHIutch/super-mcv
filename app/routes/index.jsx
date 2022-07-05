@@ -1,17 +1,23 @@
 import { json } from '@remix-run/node'
 import { Form } from '@remix-run/react'
 import clsx from 'clsx'
-import { Button, TextInput } from 'flowbite-react'
+import { Button } from 'flowbite-react'
 import { GripVertical, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
-import { useGetNanoId } from '../hooks/useGetNanoId'
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  resetServerContext,
+} from 'react-beautiful-dnd'
+import GrowingTextarea from '../components/GrowingTextarea'
+import { getNanoId } from '../utils/functions'
 
 export default function Index() {
   const [items, setItems] = useState([
-    { id: '1', value: 'a' },
-    { id: '2', value: 'b' },
-    { id: '3', value: 'c' },
+    { uniqueId: '1', value: 'a' },
+    { uniqueId: '2', value: 'b' },
+    { uniqueId: '3', value: 'c' },
   ])
   const [isWindowReady, setIsWindowReady] = useState(false)
 
@@ -20,7 +26,7 @@ export default function Index() {
   }, [])
 
   const addItem = () => {
-    setItems([...items, { id: useGetNanoId(), value: '' }])
+    setItems([...items, { id: getNanoId(), value: '' }])
   }
 
   const updateItem = (index, value) => {
@@ -44,7 +50,6 @@ export default function Index() {
   }
 
   const handleDragEnd = (result) => {
-    // dropped outside the list
     if (!result.destination) {
       return
     }
@@ -57,6 +62,8 @@ export default function Index() {
 
     setItems(newItems)
   }
+
+  resetServerContext()
 
   return (
     <div className="min-h-screen bg-slate-100 py-20">
@@ -71,69 +78,66 @@ export default function Index() {
         </div>
         <Form method="post">
           <div className="mb-8 rounded-md border border-slate-300 bg-slate-200 p-4">
-            {isWindowReady ? (
-              <DragDropContext onDragEnd={handleDragEnd}>
-                <Droppable droppableId="droppable">
-                  {(provided, snapshot) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef}>
-                      {items.map((item, idx) => (
-                        <Draggable
-                          key={item.id}
-                          draggableId={item.id}
-                          index={idx}
-                        >
-                          {(provided, snapshot) => (
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <Droppable droppableId="droppable">
+                {(provided, snapshot) => (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {items.map((item, idx) => (
+                      <Draggable
+                        key={item.uniqueId}
+                        draggableId={item.uniqueId}
+                        index={idx}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            className="mb-4"
+                          >
                             <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              className="mb-4"
+                              className={clsx(
+                                'rounded-md bg-white transition-all',
+                                snapshot.isDragging && !snapshot.isDropAnimating
+                                  ? 'scale-[1.03] shadow-xl'
+                                  : 'scale-100 shadow-sm'
+                              )}
                             >
-                              <div
-                                className={clsx(
-                                  'rounded-md bg-white transition-all',
-                                  snapshot.isDragging &&
-                                    !snapshot.isDropAnimating
-                                    ? 'scale-[1.03] shadow-xl'
-                                    : 'scale-100 shadow-sm'
-                                )}
-                              >
-                                <div className="flex items-center">
-                                  <div
-                                    className="py-6 px-2 text-slate-500"
-                                    {...provided.dragHandleProps}
+                              <div className="flex items-center">
+                                <div
+                                  className="py-6 px-2 text-slate-500"
+                                  {...provided.dragHandleProps}
+                                >
+                                  <GripVertical />
+                                </div>
+                                <div className="flex-1 py-4 pl-1">
+                                  <GrowingTextarea
+                                    name="item"
+                                    value={item.value}
+                                    onChange={(e) =>
+                                      updateItem(idx, e.target.value)
+                                    }
+                                  />
+                                </div>
+                                <div className="p-4 text-slate-500">
+                                  <Button
+                                    onClick={() => removeItem(idx)}
+                                    color="light"
+                                    disabled={items.length <= 2}
                                   >
-                                    <GripVertical />
-                                  </div>
-                                  <div className="flex-1 py-4 pl-1">
-                                    <GrowingTextarea
-                                      name="item"
-                                      value={item.value}
-                                      onChange={(e) =>
-                                        updateItem(idx, e.target.value)
-                                      }
-                                    />
-                                  </div>
-                                  <div className="p-4 text-slate-500">
-                                    <Button
-                                      onClick={() => removeItem(idx)}
-                                      color="light"
-                                      disabled={items.length <= 2}
-                                    >
-                                      <Trash2 className="h-4 w-4 text-red-500" />
-                                    </Button>
-                                  </div>
+                                    <Trash2 className="h-4 w-4 text-red-500" />
+                                  </Button>
                                 </div>
                               </div>
                             </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-            ) : null}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
             <div className="flex justify-center">
               <Button color="light" onClick={addItem}>
                 Add an Item
@@ -149,34 +153,10 @@ export default function Index() {
   )
 }
 
-const GrowingTextarea = ({ value, onChange, className, ...props }) => {
-  const sharedStyles = 'border py-2 px-3'
-  const textareaStyles =
-    'absolute top-0 left-0 h-full w-full resize-none overflow-hidden'
-  const growableStyles = 'invisible min-h-[2.625rem] whitespace-pre-wrap'
-
-  return (
-    <div className={clsx('relative', className)}>
-      <div aria-hidden="true" className={clsx(sharedStyles, growableStyles)}>
-        {value}
-      </div>
-      <textarea
-        {...props}
-        className={clsx(
-          sharedStyles,
-          textareaStyles,
-          'focus:blue-indigo-500 block rounded-md border-gray-300 bg-gray-50 focus:border-blue-500'
-        )}
-        value={value}
-        onChange={onChange}
-      />
-    </div>
-  )
-}
-
 export async function action({ request }) {
   const formData = await request.formData()
   const items = formData.getAll('item')
-  const uniqeSlug = useGetNanoId()
+  console.log({ items })
+  const uniqeSlug = getNanoId()
   return json({ uniqeSlug })
 }
