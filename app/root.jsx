@@ -35,6 +35,12 @@ export default function App() {
       <body>
         <Outlet />
         <ScrollRestoration />
+
+        <script
+          src="https://cdn.usefathom.com/script.js"
+          data-site="TRSSCIOR"
+          defer
+        />
         <Scripts />
         <LiveReload />
       </body>
