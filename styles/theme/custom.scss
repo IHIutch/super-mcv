@@ -1,0 +1,53 @@
+@mixin thumb {
+  @apply appearance-none;
+  @apply bg-blue-500;
+  @apply border-0;
+  @apply rounded-full;
+  @apply cursor-pointer;
+  @apply h-5;
+  @apply w-5;
+}
+
+@mixin disabled-thumb {
+  @apply bg-gray-500;
+}
+@mixin focus-thumb {
+  @apply outline-offset-2;
+  @apply outline-blue-500;
+}
+
+@mixin progress {
+  @apply bg-blue-500;
+}
+
+input[type='range'] {
+  &::-webkit-slider-thumb {
+    @include thumb;
+  }
+  &::-moz-range-thumb {
+    @include thumb;
+  }
+  &:disabled {
+    &::-webkit-slider-thumb {
+      @include disabled-thumb;
+    }
+    &::-moz-range-thumb {
+      @include disabled-thumb;
+    }
+  }
+  &:focus {
+    &::-webkit-slider-thumb {
+      @include focus-thumb;
+    }
+    &::-moz-range-thumb {
+      @include focus-thumb;
+    }
+  }
+
+  &::-moz-range-progress {
+    @include progress;
+  }
+  &::-ms-fill-lower {
+    @include progress;
+  }
+}

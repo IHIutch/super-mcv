@@ -65,7 +65,7 @@ export default function SurveyReuslts() {
               max={roundChoices.length}
               value={sliderValue}
               onChange={(e) => setSliderValue(e.target.value)}
-              className="w-full "
+              className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200"
             />
           </div>
           {/* <pre>{JSON.stringify(roundChoices, null, 2)}</pre> */}
