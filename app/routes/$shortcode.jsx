@@ -9,7 +9,6 @@ import {
 } from 'react-beautiful-dnd'
 import clsx from 'clsx'
 import { GripVertical } from 'lucide-react'
-import { Button, Label, TextInput } from 'flowbite-react'
 import shuffle from 'lodash/shuffle'
 import { prismaGetSurvey } from '../utils/prisma/surveys.server'
 import { prismaCreateResponse } from '../utils/prisma/responses.server'
@@ -52,11 +51,21 @@ export default function Survey() {
         <Form method="post">
           <div className="mb-4 px-4">
             <div className="mb-1">
-              <Label htmlFor="name">Your Name</Label>
+              <label
+                htmlFor="name"
+                className="mb-2 text-sm font-medium text-gray-900"
+              >
+                Your Name
+              </label>
             </div>
-            <TextInput id="name" name="name" required />
+            <input
+              id="name"
+              name="name"
+              className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+              required
+            />
           </div>
-          <div className="mb-8 rounded-md border border-slate-300 bg-slate-200 p-4">
+          <div className="mb-8 rounded-md border border-slate-300 bg-slate-200 px-4 pt-4">
             <DragDropContext onDragEnd={handleDragEnd}>
               <Droppable droppableId="droppable">
                 {(provided, snapshot) => (
@@ -108,7 +117,12 @@ export default function Survey() {
           </div>
           <input type="hidden" name="surveyId" value={survey.id} />
           <div className="flex justify-end">
-            <Button type="submit">Submit Answers</Button>
+            <button
+              type="submit"
+              className="mr-2 mb-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
+            >
+              Submit Answers
+            </button>
           </div>
         </Form>
       </div>

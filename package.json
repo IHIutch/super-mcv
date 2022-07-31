@@ -14,8 +14,6 @@
     "@remix-run/vercel": "^1.5.1",
     "@vercel/node": "^1.15.4",
     "clsx": "^1.1.1",
-    "flowbite": "^1.4.7",
-    "flowbite-react": "^0.0.27",
     "joi": "^17.6.0",
     "lucide-react": "^0.71.0",
     "nanoid-good": "^3.1.0",

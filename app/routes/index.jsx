@@ -1,9 +1,8 @@
-import { json, redirect } from '@remix-run/node'
-import { Form } from '@remix-run/react'
+import { redirect } from '@remix-run/node'
+import { Form, useLoaderData } from '@remix-run/react'
 import clsx from 'clsx'
-import { Button, Label, TextInput } from 'flowbite-react'
 import { GripVertical, Trash2 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   DragDropContext,
   Draggable,
@@ -15,14 +14,11 @@ import { getNanoId } from '../utils/functions'
 import { prismaCreateSurvey } from '../utils/prisma/surveys.server'
 
 export default function Index() {
-  const [items, setItems] = useState([
-    { uniqueId: '1', value: 'a' },
-    { uniqueId: '2', value: 'b' },
-    { uniqueId: '3', value: 'c' },
-  ])
+  const { placeholderValue } = useLoaderData()
 
+  const [items, setItems] = useState(placeholderValue)
   const addItem = () => {
-    setItems([...items, { id: getNanoId(), value: '' }])
+    setItems([...items, { uniqueId: getNanoId(), value: '' }])
   }
 
   const updateItem = (index, value) => {
@@ -75,9 +71,19 @@ export default function Index() {
         <Form method="post">
           <div className="mb-4 px-4">
             <div className="mb-1">
-              <Label htmlFor="question">Your Question</Label>
+              <label
+                htmlFor="question"
+                className="mb-2 text-sm font-medium text-gray-900"
+              >
+                Your Question
+              </label>
             </div>
-            <TextInput id="question" name="question" required />
+            <input
+              id="question"
+              name="question"
+              className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+              required
+            />
           </div>
           <div className="mb-8 rounded-md border border-slate-300 bg-slate-200 p-4">
             <DragDropContext onDragEnd={handleDragEnd}>
@@ -121,13 +127,14 @@ export default function Index() {
                                   />
                                 </div>
                                 <div className="p-4 text-slate-500">
-                                  <Button
+                                  <button
+                                    type="button"
                                     onClick={() => removeItem(idx)}
-                                    color="light"
+                                    className="mr-2 mb-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200"
                                     disabled={items.length <= 2}
                                   >
                                     <Trash2 className="h-4 w-4 text-red-500" />
-                                  </Button>
+                                  </button>
                                 </div>
                               </div>
                             </div>
@@ -141,18 +148,38 @@ export default function Index() {
               </Droppable>
             </DragDropContext>
             <div className="flex justify-center">
-              <Button color="light" onClick={addItem}>
+              <button
+                type="button"
+                className='className="mr-2 focus:ring-gray-200" mb-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4'
+                onClick={addItem}
+              >
                 Add an Item
-              </Button>
+              </button>
             </div>
           </div>
           <div className="flex justify-end">
-            <Button type="submit">Launch Poll!</Button>
+            <button
+              type="submit"
+              className="mr-2 mb-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
+            >
+              Launch Poll!
+            </button>
           </div>
         </Form>
       </div>
     </div>
   )
+}
+
+export const loader = async () => {
+  const placeholderValue = [...Array(3)].map(() => ({
+    uniqueId: getNanoId(),
+    value: '',
+  }))
+
+  return {
+    placeholderValue,
+  }
 }
 
 export async function action({ request }) {
