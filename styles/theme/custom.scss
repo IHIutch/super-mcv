@@ -1,4 +1,4 @@
-@mixin thumb {
+.thumb {
   @apply appearance-none;
   @apply bg-blue-500;
   @apply border-0;
@@ -8,46 +8,47 @@
   @apply w-5;
 }
 
-@mixin disabled-thumb {
+.disabled-thumb {
   @apply bg-gray-500;
 }
-@mixin focus-thumb {
+
+.focus-thumb {
   @apply outline-offset-2;
   @apply outline-blue-500;
 }
 
-@mixin progress {
+.progress {
   @apply bg-blue-500;
 }
 
 input[type='range'] {
   &::-webkit-slider-thumb {
-    @include thumb;
+    @apply thumb;
   }
   &::-moz-range-thumb {
-    @include thumb;
+    @apply thumb;
   }
   &:disabled {
     &::-webkit-slider-thumb {
-      @include disabled-thumb;
+      @apply disabled-thumb;
     }
     &::-moz-range-thumb {
-      @include disabled-thumb;
+      @apply disabled-thumb;
     }
   }
   &:focus {
     &::-webkit-slider-thumb {
-      @include focus-thumb;
+      @apply focus-thumb;
     }
     &::-moz-range-thumb {
-      @include focus-thumb;
+      @apply focus-thumb;
     }
   }
 
   &::-moz-range-progress {
-    @include progress;
+    @apply progress;
   }
   &::-ms-fill-lower {
-    @include progress;
+    @apply progress;
   }
 }
