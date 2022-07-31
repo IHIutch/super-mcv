@@ -130,7 +130,12 @@ export default function Index() {
                                   <button
                                     type="button"
                                     onClick={() => removeItem(idx)}
-                                    className="mr-2 mb-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200"
+                                    className={clsx(
+                                      items.length <= 2
+                                        ? 'cursor-not-allowed bg-gray-100'
+                                        : 'bg-white',
+                                      'h-10 rounded-lg border border-gray-300 px-3 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200'
+                                    )}
                                     disabled={items.length <= 2}
                                   >
                                     <Trash2 className="h-4 w-4 text-red-500" />
@@ -150,7 +155,7 @@ export default function Index() {
             <div className="flex justify-center">
               <button
                 type="button"
-                className='className="mr-2 focus:ring-gray-200" mb-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4'
+                className="mr-2 mb-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200"
                 onClick={addItem}
               >
                 Add an Item
