@@ -54,7 +54,7 @@ export default function SurveyReuslts() {
           <div>
             <label
               htmlFor="roundRangeSlider"
-              className="mb-2 block text-sm font-medium text-gray-900 "
+              className="mb-2 block text-sm font-medium text-gray-900"
             >
               Rounds: {sliderValue}
             </label>
@@ -65,7 +65,7 @@ export default function SurveyReuslts() {
               max={roundChoices.length}
               value={sliderValue}
               onChange={(e) => setSliderValue(e.target.value)}
-              className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200"
+              className="w-full "
             />
           </div>
           {/* <pre>{JSON.stringify(roundChoices, null, 2)}</pre> */}
