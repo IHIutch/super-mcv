@@ -130,6 +130,14 @@ export default function Survey() {
   )
 }
 
+export const meta = ({ data }) => {
+  const { survey } = data
+  return {
+    title: survey.question,
+    description: 'Never let a vote go to waste',
+  }
+}
+
 export const loader = async ({ params }) => {
   const { shortcode } = params
   const survey = await prismaGetSurvey({ shortcode })

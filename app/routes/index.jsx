@@ -65,7 +65,7 @@ export default function Index() {
             Super Ranked Choice Voting!
           </h1>
           <p className="text-xl font-light text-slate-600">
-            Ranked Choice Voting is the ultimate voting style.
+            Never let a vote go to waste
           </p>
         </div>
         <Form method="post">
@@ -175,6 +175,11 @@ export default function Index() {
     </div>
   )
 }
+
+export const meta = () => ({
+  title: 'Super Ranked Choice Voting',
+  description: 'Never let a vote go to waste',
+})
 
 export const loader = async () => {
   const placeholderValue = [...Array(3)].map(() => ({

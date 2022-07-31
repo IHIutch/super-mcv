@@ -75,6 +75,14 @@ export default function SurveyReuslts() {
   )
 }
 
+export const meta = ({ data }) => {
+  const { survey } = data
+  return {
+    title: 'Results | ' + survey.question,
+    description: 'Never let a vote go to waste',
+  }
+}
+
 export const loader = async ({ params }) => {
   const { shortcode } = params
 
