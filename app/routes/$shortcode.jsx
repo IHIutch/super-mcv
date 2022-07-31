@@ -47,6 +47,9 @@ export default function Survey() {
       <div className="mx-auto max-w-screen-md">
         <div className="mb-8 text-center">
           <h1 className="mb-1 text-5xl font-bold">{survey.question}</h1>
+          <p className="text-xl font-light text-slate-600">
+            Rank Choices from Top to Bottom
+          </p>
         </div>
         <Form method="post">
           <div className="mb-4 px-4">

@@ -65,7 +65,7 @@ export default function Index() {
             Super Ranked Choice Voting!
           </h1>
           <p className="text-xl font-light text-slate-600">
-            Never let a vote go to waste
+            Never Let a Vote Go to Waste
           </p>
         </div>
         <Form method="post">
@@ -167,7 +167,7 @@ export default function Index() {
               type="submit"
               className="mr-2 mb-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
             >
-              Launch Poll!
+              Launch Survey!
             </button>
           </div>
         </Form>
@@ -178,7 +178,7 @@ export default function Index() {
 
 export const meta = () => ({
   title: 'Super Ranked Choice Voting',
-  description: 'Never let a vote go to waste',
+  description: 'Never Let a Vote Go to Waste',
 })
 
 export const loader = async () => {

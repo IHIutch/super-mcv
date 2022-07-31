@@ -16,7 +16,7 @@ export default function SurveyReuslts() {
         <div className="mb-8">
           <div className="mb-12 text-center">
             <h1 className="mb-1 text-5xl font-bold">{survey.question}</h1>
-            <p className="text-xl font-light text-slate-600">Results</p>
+            <p className="text-xl font-light text-slate-600">Survey Results</p>
           </div>
           <div className="mb-12">
             {survey.choices.map((choice, idx) => (
