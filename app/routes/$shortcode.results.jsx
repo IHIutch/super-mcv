@@ -1,5 +1,5 @@
 import { json } from '@remix-run/node'
-import { useLoaderData, useParams } from '@remix-run/react'
+import { useLoaderData } from '@remix-run/react'
 import React, { useState } from 'react'
 import { prismaGetResponses } from '../utils/prisma/responses.server'
 import { prismaGetSurvey } from '../utils/prisma/surveys.server'
@@ -9,16 +9,16 @@ import clsx from 'clsx'
 export default function SurveyReuslts() {
   const { survey, roundChoices, winner } = useLoaderData()
   const [sliderValue, setSliderValue] = useState(winner.winningRoundIdx + 1)
-  const params = useParams()
-  const { shortcode } = params
+
   return (
     <div className="min-h-screen bg-slate-100 py-20">
       <div className="mx-auto max-w-screen-md">
         <div className="mb-8">
           <div className="mb-12 text-center">
             <h1 className="mb-1 text-5xl font-bold">Results</h1>
-            <h2>{survey.question}</h2>
-            <p className="text-xl font-light text-slate-600">{shortcode}</p>
+            <p className="text-xl font-light text-slate-600">
+              {survey.question}
+            </p>
           </div>
           <div className="mb-12">
             {survey.choices.map((choice, idx) => (

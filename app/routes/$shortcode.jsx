@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Form, useLoaderData, useParams } from '@remix-run/react'
+import { Form, useLoaderData } from '@remix-run/react'
 import { json, redirect } from '@remix-run/node'
 import {
   DragDropContext,
@@ -15,11 +15,8 @@ import { prismaGetSurvey } from '../utils/prisma/surveys.server'
 import { prismaCreateResponse } from '../utils/prisma/responses.server'
 
 export default function Survey() {
-  const params = useParams()
-  const { shortcode } = params
   const { survey } = useLoaderData()
 
-  console.log(survey.choices)
   const [tempChoices, setTempChoices] = useState(survey.choices)
 
   const reorder = (list, startIndex, endIndex) => {
@@ -51,7 +48,6 @@ export default function Survey() {
       <div className="mx-auto max-w-screen-md">
         <div className="mb-8 text-center">
           <h1 className="mb-1 text-5xl font-bold">{survey.question}</h1>
-          <p className="text-xl font-light text-slate-600">{shortcode}</p>
         </div>
         <Form method="post">
           <div className="mb-4 px-4">
