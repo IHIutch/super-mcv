@@ -76,7 +76,7 @@ export default function Index() {
                 htmlFor="question"
                 className="mb-2 text-sm font-medium text-gray-900"
               >
-                Your Question
+                Your Prompt
               </label>
             </div>
             <input
