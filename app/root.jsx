@@ -38,7 +38,7 @@ export default function App() {
 
         <script
           src="https://cdn.usefathom.com/script.js"
-          data-site="TRSSCIOR"
+          data-site="KHTJBPYA"
           defer
         />
         <Scripts />
