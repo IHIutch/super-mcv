@@ -1,4 +1,8 @@
-# Welcome to Remix!
+# Welcome
+
+Special thanks to [Hashnode](https://hashnode.com) and [PlanetScale](https://planetscale.com) for supportingt the hackathon.
+
+## Welcome to Remix
 
 - [Remix Docs](https://remix.run/docs)
 
