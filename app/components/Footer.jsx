@@ -32,7 +32,7 @@ export default function Footer() {
           target="_blank"
           rel="noreferrer"
         >
-          Buy Me a Coffee!
+          Buy Me a Tea 🫖
         </a>
       </div>
     </div>
