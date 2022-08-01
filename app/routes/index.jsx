@@ -9,6 +9,7 @@ import {
   Droppable,
   resetServerContext,
 } from 'react-beautiful-dnd'
+import Footer from '../components/Footer'
 import GrowingTextarea from '../components/GrowingTextarea'
 import { getNanoId } from '../utils/functions'
 import { prismaCreateSurvey } from '../utils/prisma/surveys.server'
@@ -172,6 +173,7 @@ export default function Index() {
           </div>
         </Form>
       </div>
+      <Footer />
     </div>
   )
 }

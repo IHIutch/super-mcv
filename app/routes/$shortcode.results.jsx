@@ -5,6 +5,7 @@ import { prismaGetResponses } from '../utils/prisma/responses.server'
 import { prismaGetSurvey } from '../utils/prisma/surveys.server'
 import countBy from 'lodash/countBy'
 import clsx from 'clsx'
+import Footer from '../components/Footer'
 
 export default function SurveyReuslts() {
   const { survey, roundChoices, winner } = useLoaderData()
@@ -71,6 +72,7 @@ export default function SurveyReuslts() {
           {/* <pre>{JSON.stringify(roundChoices, null, 2)}</pre> */}
         </div>
       </div>
+      <Footer />
     </div>
   )
 }

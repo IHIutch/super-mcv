@@ -12,6 +12,7 @@ import { GripVertical } from 'lucide-react'
 import shuffle from 'lodash/shuffle'
 import { prismaGetSurvey } from '../utils/prisma/surveys.server'
 import { prismaCreateResponse } from '../utils/prisma/responses.server'
+import Footer from '../components/Footer'
 
 export default function Survey() {
   const { survey } = useLoaderData()
@@ -129,6 +130,7 @@ export default function Survey() {
           </div>
         </Form>
       </div>
+      <Footer />
     </div>
   )
 }
