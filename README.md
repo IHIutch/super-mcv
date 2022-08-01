@@ -1,6 +1,6 @@
 # Welcome
 
-Special thanks to [Hashnode](https://hashnode.com) and [PlanetScale](https://planetscale.com) for supportingt the hackathon.
+Special thanks to [Hashnode](https://hashnode.com) and [PlanetScale](https://planetscale.com) for supporting the hackathon.
 
 ## Welcome to Remix
 
